@@ -71,6 +71,17 @@ export const GlobalStyle = createGlobalStyle`
     padding: 3rem;
     position: relative;
     border-radius: 0.25rem;
+
+    .close-button-modal{
+      width: 3rem;
+      height: 3rem;
+      position: absolute;
+
+      top: 1rem;
+      right: 1rem;
+
+      cursor: pointer;
+    }
   }
 `
 

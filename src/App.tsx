@@ -1,4 +1,4 @@
-import { createServer } from 'miragejs'
+import { createServer, Model } from 'miragejs'
 import { useState } from 'react';
 
 import { GlobalStyle } from './styles/global';
@@ -8,17 +8,35 @@ import { Dashboard } from './components/Dashboard';
 
 
 createServer({
+  models: {
+    transaction: Model
+  },
+
+  seeds(server) {
+    server.db.loadData({
+      transactions: [
+        { id: 1, category: "Food", title: "Comida Chinesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "deposit" },
+        { id: 2, category: "Food", title: "Comida Japonesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "deposit" },
+        { id: 3, category: "Food", title: "Comida Tailandesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "withdraw" }
+      ]
+    })
+  },
+
   routes() {
     this.urlPrefix = 'http://localhost:3000';
     this.namespace = 'api'
 
-    this.get('/transactios', () =>  {
-    return [
-        { id: '1', category: "Food", title: "Comida Chinesa", amount: "50.00", date: new Date("2021-02-15"), typeTransaction: "deposit" },
-        { id: '2', category: "Food", title: "Comida Japonesa", amount: "50.00", date: new Date("2021-02-15"), typeTransaction: "deposit" },
-        { id: '3', category: "Food", title: "Comida Tailandesa", amount: "50.00", date: new Date("2021-02-15"), typeTransaction: "deposit" }
-      ]
-    })
+    this.get('/transactions', (schema) =>  {
+        return schema.all('transaction')
+      }
+    )
+
+    this.post('/transactions', (schema, request) =>  {
+      const res = schema.create('transaction', JSON.parse(request.requestBody))
+
+      return res
+    }
+  )
   }
 })
 
