@@ -12,24 +12,5 @@ export const Container = styled.header`
       padding: 1rem 2rem;
       text-align: left;
     }
-
-    td {
-      padding: 1rem 2rem;
-      border: 0;
-      background-color: var(--shape);
-      border-radius: 0.25rem;
-
-      &:first-child{
-        color: var(--text-title);
-      }
-
-      &.withdraw{
-        color: var(--red);
-      }
-
-      &.deposit{
-        color: var(--green);
-      }
-    }
   }
 `;

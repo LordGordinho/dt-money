@@ -13,7 +13,7 @@ interface Transaction{
 interface TransactionsContextProps {
   transactions: Transaction[];
 
-  setTransactions: (e: Transaction[]) => void
+  addTransaction: (e: Transaction) => void
 }
 
 const TransactionsContext = createContext<TransactionsContextProps>(
@@ -24,8 +24,13 @@ interface TransactionsProviderProps {
   children: ReactNode;
 }
 
+
 export const TransactionsProvider: React.FC<TransactionsProviderProps> = ({children}) =>{
   const [transactions, setTransactions] = useState<Transaction[]>([])
+
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions([...transactions, transaction])
+  }
 
   useEffect(() => {
     api.get('/transactions')
@@ -33,7 +38,7 @@ export const TransactionsProvider: React.FC<TransactionsProviderProps> = ({child
   },[])
   
   return (
-    <TransactionsContext.Provider value={{transactions, setTransactions}}>
+    <TransactionsContext.Provider value={{transactions, addTransaction}}>
       {children}
     </TransactionsContext.Provider>
   )
@@ -44,3 +49,4 @@ export const useTransactions = () => {
 
   return context;
 }
+

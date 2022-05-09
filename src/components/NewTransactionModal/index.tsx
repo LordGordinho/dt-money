@@ -5,21 +5,13 @@ import incomeImg from '../../assets/income.svg';
 import closeImg from '../../assets/close.svg';
 
 import { Container, TransactionTypeContainer, RadioButton } from './styles';
-import { useState, FormEvent, useContext} from 'react';
+import { useState, FormEvent } from 'react';
 import { api } from '../../services/api';
 import { useTransactions } from '../../hooks/TransactionsContext';
+import { Transaction } from '../../types/Transaction';
 interface NewTransactionModalProps {
   isOpen: boolean
   onRequestClose: () => void
-}
-
-interface Transaction{
-  id: number;
-  amount: number;
-  category: string;
-  title: string;
-  date: string;
-  typeTransaction: string;
 }
 
 interface TransactionResponseCreate {
@@ -31,7 +23,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
   const [transactionTitle, setTransactionTitle] = useState('')
   const [transactionPrice, setTransactionPrice] = useState(0)
   const [transactionCategory, setTransactionCategory] = useState('')
-  const { transactions, setTransactions} = useTransactions();
+  const { addTransaction} = useTransactions();
 
   const handleSubmitForm = ( event: FormEvent<HTMLFormElement> ) => {
     event.preventDefault()
@@ -44,7 +36,9 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
       typeTransaction: transactionType
     }
 
-    api.post<TransactionResponseCreate>('transactions', data).then(res => setTransactions([...transactions, res.data.transaction]))
+    api.post<TransactionResponseCreate>('transactions', data).then(res => addTransaction(res.data.transaction))
+
+    handleRequestClose()
   }
 
   const handleRequestClose = () => {
@@ -74,6 +68,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
           placeholder='Titulo' 
           value={transactionTitle}
           onChange={ event => setTransactionTitle(event.target.value)}
+          required
         />
 
         <input 
@@ -82,6 +77,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
           placeholder='Valor' 
           value={transactionPrice}
           onChange={ event => setTransactionPrice(Number(event.target.value))}
+          required
         />
 
         <TransactionTypeContainer>
@@ -112,6 +108,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
           placeholder='Categoria' 
           value={transactionCategory}
           onChange={ event => setTransactionCategory(event.target.value)}
+          required
         />
         
         <button type="submit">
