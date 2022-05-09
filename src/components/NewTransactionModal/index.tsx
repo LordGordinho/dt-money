@@ -47,14 +47,23 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
     api.post<TransactionResponseCreate>('transactions', data).then(res => setTransactions([...transactions, res.data.transaction]))
   }
 
+  const handleRequestClose = () => {
+    setTransactionType('deposit')
+    setTransactionTitle('')
+    setTransactionPrice(0)
+    setTransactionCategory('')
+
+    onRequestClose()
+  }
+
   return (
     <Modal
       isOpen={isOpen}
-      onRequestClose={onRequestClose}
+      onRequestClose={handleRequestClose}
       overlayClassName="react-modal-overlay"
       className="react-modal-content"
     >
-      <img className='close-button-modal' src={closeImg} alt="Fechar" onClick={onRequestClose}/>
+      <img className='close-button-modal' src={closeImg} alt="Fechar" onClick={handleRequestClose}/>
 
       <Container onSubmit={(e) => handleSubmitForm(e)}>
         <h2>Nova Transação</h2>
