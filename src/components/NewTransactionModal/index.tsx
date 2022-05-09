@@ -7,7 +7,7 @@ import closeImg from '../../assets/close.svg';
 import { Container, TransactionTypeContainer, RadioButton } from './styles';
 import { useState, FormEvent, useContext} from 'react';
 import { api } from '../../services/api';
-import { TransactionsContext } from '../../TransactionsContext';
+import { useTransactions } from '../../hooks/TransactionsContext';
 interface NewTransactionModalProps {
   isOpen: boolean
   onRequestClose: () => void
@@ -31,7 +31,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
   const [transactionTitle, setTransactionTitle] = useState('')
   const [transactionPrice, setTransactionPrice] = useState(0)
   const [transactionCategory, setTransactionCategory] = useState('')
-  const { transactions, setTransactions} = useContext(TransactionsContext)
+  const { transactions, setTransactions} = useTransactions();
 
   const handleSubmitForm = ( event: FormEvent<HTMLFormElement> ) => {
     event.preventDefault()
