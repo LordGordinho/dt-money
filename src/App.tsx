@@ -5,6 +5,7 @@ import { GlobalStyle } from './styles/global';
 import { NewTransactionModal } from './components/NewTransactionModal';
 import { Header } from './components/Header'
 import { Dashboard } from './components/Dashboard';
+import { TransactionsProvider } from './TransactionsContext'
 
 
 createServer({
@@ -15,9 +16,9 @@ createServer({
   seeds(server) {
     server.db.loadData({
       transactions: [
-        { id: 1, category: "Food", title: "Comida Chinesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "deposit" },
-        { id: 2, category: "Food", title: "Comida Japonesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "deposit" },
-        { id: 3, category: "Food", title: "Comida Tailandesa", amount: 50, date: new Date("2021-02-15"), typeTransaction: "withdraw" }
+        { id: 1, category: "Food", title: "Comida Chinesa", amount: 50, date: "2021-02-15", typeTransaction: "deposit" },
+        { id: 2, category: "Food", title: "Comida Japonesa", amount: 50, date: "2021-02-15", typeTransaction: "deposit" },
+        { id: 3, category: "Food", title: "Comida Tailandesa", amount: 50, date: "2021-02-15", typeTransaction: "withdraw" }
       ]
     })
   },
@@ -53,10 +54,12 @@ function App() {
 
   return (
     <div className="App">
-      <GlobalStyle />
-      <NewTransactionModal isOpen={isNewTransactionModalOpen} onRequestClose={handleCloseNewTransactionModal} />
-      <Header onHandleNewTransaction={handleOpenNewTransactionModal} />
-      <Dashboard />
+      <TransactionsProvider>
+        <GlobalStyle />
+        <NewTransactionModal isOpen={isNewTransactionModalOpen} onRequestClose={handleCloseNewTransactionModal} />
+        <Header onHandleNewTransaction={handleOpenNewTransactionModal} />
+        <Dashboard />
+      </TransactionsProvider>
     </div>
   );
 }

@@ -5,8 +5,9 @@ import incomeImg from '../../assets/income.svg';
 import closeImg from '../../assets/close.svg';
 
 import { Container, TransactionTypeContainer, RadioButton } from './styles';
-import { useState, FormEvent} from 'react';
+import { useState, FormEvent, useContext} from 'react';
 import { api } from '../../services/api';
+import { TransactionsContext } from '../../TransactionsContext';
 interface NewTransactionModalProps {
   isOpen: boolean
   onRequestClose: () => void
@@ -21,11 +22,16 @@ interface Transaction{
   typeTransaction: string;
 }
 
+interface TransactionResponseCreate {
+  transaction: Transaction;
+}
+
 export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionModalProps) => {
   const [transactionType, setTransactionType] = useState<'deposit'|'withdraw'>('deposit')
   const [transactionTitle, setTransactionTitle] = useState('')
   const [transactionPrice, setTransactionPrice] = useState(0)
   const [transactionCategory, setTransactionCategory] = useState('')
+  const { transactions, setTransactions} = useContext(TransactionsContext)
 
   const handleSubmitForm = ( event: FormEvent<HTMLFormElement> ) => {
     event.preventDefault()
@@ -34,11 +40,11 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
       category: transactionCategory, 
       title: transactionTitle, 
       amount: transactionPrice, 
-      date: new Date("2021-02-13"), 
+      date: "2021-02-13", 
       typeTransaction: transactionType
     }
 
-    api.post<Transaction>('transactions', data).then(res => console.log(res))
+    api.post<TransactionResponseCreate>('transactions', data).then(res => setTransactions([...transactions, res.data.transaction]))
   }
 
   return (
