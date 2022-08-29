@@ -23,7 +23,7 @@ export const NewTransactionModal = ({ isOpen, onRequestClose}: NewTransactionMod
   const [transactionTitle, setTransactionTitle] = useState('')
   const [transactionPrice, setTransactionPrice] = useState(0)
   const [transactionCategory, setTransactionCategory] = useState('')
-  const { addTransaction} = useTransactions();
+  const { addTransaction } = useTransactions();
 
   const handleSubmitForm = ( event: FormEvent<HTMLFormElement> ) => {
     event.preventDefault()
